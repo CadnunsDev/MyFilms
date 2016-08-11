@@ -1,0 +1,30 @@
+{
+	"variables": [],
+	"info": {
+		"name": "teste mobile entrevista",
+		"_postman_id": "10925035-5ede-699a-61df-b61190759b50",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://www.omdbapi.com/?t=frozen&y=&plot=short&r=json",
+			"request": {
+				"url": "http://www.omdbapi.com/?t=frozen&y=&plot=short&r=json",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"cadnuns.dimir@gmail.com\",\n    \"password\":\"ksksjsjhd0092389-\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
