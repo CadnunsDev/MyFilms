@@ -4,9 +4,9 @@ package com.cadnunsdev.myfilms.models;
  * Created by Tiago Silva on 10/08/2016.
  */
 public class FilmeProcurado {
-    private String Title;
-    private String Year;
-    private String imdbID;
+    protected String Title;
+    protected String Year;
+    protected String imdbID;
 
     @Override
     public String toString() {
@@ -19,5 +19,9 @@ public class FilmeProcurado {
 
     public String getImdbId() {
         return imdbID;
+    }
+
+    public String getYear() {
+        return Year;
     }
 }

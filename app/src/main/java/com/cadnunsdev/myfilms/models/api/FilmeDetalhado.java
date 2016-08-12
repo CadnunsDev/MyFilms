@@ -86,4 +86,6 @@ public class FilmeDetalhado extends FilmeProcurado{
     public boolean getResponse() {
         return Response;
     }
+
+
 }

@@ -20,18 +20,23 @@ import retrofit2.Response;
  */
 public class DetalhesFilmesViewHelper {
     private final View _view;
-    private final TextView _edtTitle;
+    private final TextView _tvTitle;
     private final Button _btnFecharDetalhes;
     private final ImageView _imageView;
+    private final TextView _tvAno;
+    private final TextView _tvAtores;
+    private final TextView _tvSinopse;
     private FilmeDetalhado _detalhes;
 
     public DetalhesFilmesViewHelper(FilmeProcurado filmeProcurado, View detalhesFilmeBusca){
         _view = detalhesFilmeBusca;
-        _edtTitle = (TextView)_view.findViewById(R.id.tvTituloFilme);
-        _edtTitle.setText(filmeProcurado.getTitle());
+        _tvTitle = (TextView)_view.findViewById(R.id.tvTituloFilme);
+        _tvAno = (TextView)_view.findViewById(R.id.tvAno);
+        _tvAtores = (TextView)_view.findViewById(R.id.tvAtores);
+        _tvSinopse = (TextView)_view.findViewById(R.id.tvSinopse);
+        _tvTitle.setText(filmeProcurado.getTitle());
         _btnFecharDetalhes = (Button)_view.findViewById(R.id.btnFechar);
-        //
-         _imageView = (ImageView)_view.findViewById(R.id.imgViewPoster);
+        _imageView = (ImageView)_view.findViewById(R.id.imgViewPoster);
 
         _btnFecharDetalhes.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,7 +51,10 @@ public class DetalhesFilmesViewHelper {
 
                 if(response.code() == 200 && _detalhes.getResponse()){
                     _view.setVisibility(View.VISIBLE);
-                    _edtTitle.setText(_detalhes.getTitle());
+                    _tvTitle.setText(_detalhes.getTitle());
+                    _tvAno.setText(_detalhes.getYear());
+                    _tvAtores.setText(_detalhes.getActors());
+                    _tvSinopse.setText(_detalhes.getPlot());
                     WebImageService.SetImage(_imageView,_detalhes.getPoster());
                 }else {
                     UIUtils.notificar(_view,"Cod. Http: "+response.code());
