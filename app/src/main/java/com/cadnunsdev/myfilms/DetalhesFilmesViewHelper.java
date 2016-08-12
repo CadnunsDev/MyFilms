@@ -5,6 +5,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cadnunsdev.myfilms.infra.ui.UIUtils;
 import com.cadnunsdev.myfilms.models.FilmeProcurado;
 import com.cadnunsdev.myfilms.models.api.FilmeDetalhado;
 import com.cadnunsdev.myfilms.services.api.OmdbService;
@@ -47,12 +48,14 @@ public class DetalhesFilmesViewHelper {
                     _view.setVisibility(View.VISIBLE);
                     _edtTitle.setText(_detalhes.getTitle());
                     WebImageService.SetImage(_imageView,_detalhes.getPoster());
+                }else {
+                    UIUtils.notificar(_view,"Cod. Http: "+response.code());
                 }
             }
 
             @Override
             public void onFailure(Call<FilmeDetalhado> call, Throwable t) {
-
+                UIUtils.notificar(_view,t.getMessage());
             }
         });
 

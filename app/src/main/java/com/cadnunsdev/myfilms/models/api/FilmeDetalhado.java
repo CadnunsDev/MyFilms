@@ -18,8 +18,8 @@ public class FilmeDetalhado extends FilmeProcurado{
     private String Country  ;
     private String Awards   ;
     private String Poster   ;
-    private int Metascore   ;
-    private float imdbRating;
+    private String Metascore   ;
+    private String imdbRating;
     private String imdbVotes;
     private String Type     ;
     private boolean Response;
@@ -71,11 +71,11 @@ public class FilmeDetalhado extends FilmeProcurado{
         return Poster;
     }
 
-    public int getMetascore() {
+    public String getMetascore() {
         return Metascore;
     }
 
-    public float getImdbRating() {
+    public String getImdbRating() {
         return imdbRating;
     }
 
