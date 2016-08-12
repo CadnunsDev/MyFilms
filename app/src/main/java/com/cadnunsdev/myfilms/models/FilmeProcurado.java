@@ -5,7 +5,19 @@ package com.cadnunsdev.myfilms.models;
  */
 public class FilmeProcurado {
     private String Title;
-    private int Year;
+    private String Year;
     private String imdbID;
-    
+
+    @Override
+    public String toString() {
+        return Title;
+    }
+
+    public String getTitle() {
+        return Title;
+    }
+
+    public String getImdbId() {
+        return imdbID;
+    }
 }

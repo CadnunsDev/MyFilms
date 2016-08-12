@@ -1,8 +1,10 @@
 package com.cadnunsdev.myfilms;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.view.KeyEvent;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,9 +14,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import com.cadnunsdev.myfilms.infra.ui.UIUtils;
+import com.cadnunsdev.myfilms.models.FilmeProcurado;
+import com.cadnunsdev.myfilms.models.api.OmdbSearchResponse;
+import com.cadnunsdev.myfilms.services.api.OmdbService;
+import com.cadnunsdev.myfilms.services.web.WebImageService;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private ListView _listaBuscas;
+    private EditText _edtBuscar;
+    private ArrayList<FilmeProcurado> _itensLista;
+    private ArrayAdapter<FilmeProcurado> _adapterLista;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +67,70 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        _listaBuscas = (ListView)findViewById(R.id.listaBuscas);
+        _itensLista = new ArrayList<FilmeProcurado>();
+        _adapterLista = UIUtils.SimpleAdpater(this,_itensLista);
+        _listaBuscas.setAdapter(_adapterLista);
+        _edtBuscar = (EditText)findViewById(R.id.edtBuscar);
+        final Context ctx = this;
+        String img_url = "http://ia.media-imdb.com/images/M/MV5BMTQ1MjQwMTE5OF5BMl5BanBnXkFtZTgwNjk3MTcyMDE@._V1_SX300.jpg";
+
+
+        SetViewDetalhes();
+
+
+
+        _edtBuscar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    UIUtils.hideKeyBoard(ctx, v);
+                    RequestSearch(v.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+
+
+    }
+
+    private void SetViewDetalhes() {
+        final View detalhesFilmeBusca = findViewById(R.id.detalhesFilmeBusca);
+        detalhesFilmeBusca.setVisibility(View.GONE);
+
+        _listaBuscas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                FilmeProcurado filme = _itensLista.get(i);
+                new DetalhesFilmesViewHelper(filme, detalhesFilmeBusca);
+            }
+        });
+    }
+
+    private void RequestSearch(String keyWords) {
+        final Context ctx = this;
+
+        OmdbService.Search(keyWords, new Callback<OmdbSearchResponse>() {
+            @Override
+            public void onResponse(Call<OmdbSearchResponse> call, Response<OmdbSearchResponse> response) {
+                OmdbSearchResponse data = response.body();
+                _itensLista.clear();
+                if (data.totalResults == 0)
+                    UIUtils.notificar(_listaBuscas,"Nada foi encontrado");
+                else {
+                    _itensLista.addAll(data.Search);
+                    _adapterLista.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<OmdbSearchResponse> call, Throwable t) {
+                UIUtils.notificar(_listaBuscas,t.getMessage());
+            }
+        });
     }
 
     @Override
