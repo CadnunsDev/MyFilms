@@ -9,6 +9,7 @@ import com.cadnunsdev.myfilms.infra.ui.UIUtils;
 import com.cadnunsdev.myfilms.models.FilmeProcurado;
 import com.cadnunsdev.myfilms.models.api.FilmeDetalhado;
 import com.cadnunsdev.myfilms.services.api.OmdbService;
+import com.cadnunsdev.myfilms.services.db.OrmService;
 import com.cadnunsdev.myfilms.services.web.WebImageService;
 
 import retrofit2.Call;
@@ -26,47 +27,85 @@ public class DetalhesFilmesViewHelper {
     private final TextView _tvAno;
     private final TextView _tvAtores;
     private final TextView _tvSinopse;
+    private final Button _btnSalvar;
     private FilmeDetalhado _detalhes;
 
-    public DetalhesFilmesViewHelper(FilmeProcurado filmeProcurado, View detalhesFilmeBusca){
+    private DetalhesFilmesViewHelper(View detalhesFilmeBusca){
         _view = detalhesFilmeBusca;
         _tvTitle = (TextView)_view.findViewById(R.id.tvTituloFilme);
         _tvAno = (TextView)_view.findViewById(R.id.tvAno);
         _tvAtores = (TextView)_view.findViewById(R.id.tvAtores);
         _tvSinopse = (TextView)_view.findViewById(R.id.tvSinopse);
-        _tvTitle.setText(filmeProcurado.getTitle());
         _btnFecharDetalhes = (Button)_view.findViewById(R.id.btnFechar);
         _imageView = (ImageView)_view.findViewById(R.id.imgViewPoster);
+        _btnSalvar = (Button)_view.findViewById(R.id.btnSalvar);
 
+
+        _btnSalvar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String msg = "Filme adicionado aos favoritos";
+                try {
+                    SaveEntity();
+                    _btnSalvar.setVisibility(View.GONE);
+                }catch (Exception ex){
+                    msg = ex.getMessage();
+                }finally {
+                    UIUtils.notificar(_view, msg);
+                }
+            }
+        });
+    }
+    public DetalhesFilmesViewHelper(FilmeProcurado filmeProcurado, View detalhesFilmeBusca){
+        this(detalhesFilmeBusca);
         _btnFecharDetalhes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 _view.setVisibility(View.GONE);
             }
         });
-        OmdbService.GetDetalhes(filmeProcurado.getImdbId(), new Callback<FilmeDetalhado>() {
-            @Override
-            public void onResponse(Call<FilmeDetalhado> call, Response<FilmeDetalhado> response) {
-                _detalhes = response.body();
+        FilmeDetalhado filmeDetalhado = OrmService.getFilmByImdbId(filmeProcurado.getImdbId());
+        if (filmeDetalhado != null){
+            _btnSalvar.setVisibility(View.GONE);
+            BindData(filmeDetalhado);
+        }
+        else{
+            _btnSalvar.setVisibility(View.VISIBLE);
+            OmdbService.GetDetalhes(filmeProcurado.getImdbId(), new Callback<FilmeDetalhado>() {
+                @Override
+                public void onResponse(Call<FilmeDetalhado> call, Response<FilmeDetalhado> response) {
+                    _detalhes = response.body();
 
-                if(response.code() == 200 && _detalhes.getResponse()){
-                    _view.setVisibility(View.VISIBLE);
-                    _tvTitle.setText(_detalhes.getTitle());
-                    _tvAno.setText(_detalhes.getYear());
-                    _tvAtores.setText(_detalhes.getActors());
-                    _tvSinopse.setText(_detalhes.getPlot());
-                    WebImageService.SetImage(_imageView,_detalhes.getPoster());
-                }else {
-                    UIUtils.notificar(_view,"Cod. Http: "+response.code());
+                    if(response.code() == 200 && _detalhes.getResponse()){
+                        BindData(response.body());
+                    }else {
+                        UIUtils.notificar(_view,"Cod. Http: "+response.code());
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<FilmeDetalhado> call, Throwable t) {
-                UIUtils.notificar(_view,t.getMessage());
-            }
-        });
+                @Override
+                public void onFailure(Call<FilmeDetalhado> call, Throwable t) {
+                    UIUtils.notificar(_view,t.getMessage());
+                }
+            });
+        }
 
 
+
+
+    }
+
+    private void BindData(FilmeDetalhado body) {
+        _detalhes = body;
+        _view.setVisibility(View.VISIBLE);
+        _tvTitle.setText(_detalhes.getTitle());
+        _tvAno.setText(_detalhes.getYear());
+        _tvAtores.setText(_detalhes.getActors());
+        _tvSinopse.setText(_detalhes.getPlot());
+        WebImageService.SetImage(_imageView,_detalhes.getPoster());
+    }
+
+    public void SaveEntity(){
+            OrmService.saveFilm(_detalhes);
     }
 }

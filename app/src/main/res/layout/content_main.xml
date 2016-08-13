@@ -28,7 +28,8 @@
         />
 
     <include layout="@layout/partial_filme_detalhes" android:id="@+id/detalhesFilmeBusca"
-        android:layout_height="wrap_content" />
+        android:layout_height="270dp"
+        android:layout_width="match_parent" />
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

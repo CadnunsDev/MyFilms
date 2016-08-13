@@ -13,7 +13,7 @@
         android:src="@drawable/dvd_image"
         android:background="#fff"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/btnSalvar" />
+        android:layout_alignParentBottom="true" />
 
     <LinearLayout
         android:orientation="vertical"
@@ -106,6 +106,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/tvSinopse" />
         </LinearLayout>
+
     </LinearLayout>
 
     <Button
@@ -116,19 +117,16 @@
         android:id="@+id/btnFechar"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignBottom="@+id/linearLayout" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="Salvar"
         android:id="@+id/btnSalvar"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/btnFechar"
         android:background="#78f098"
-        android:layout_alignTop="@+id/btnFechar"
-        android:layout_alignLeft="@+id/linearLayout"
-        android:layout_alignStart="@+id/linearLayout" />
+        android:layout_alignBottom="@+id/linearLayout"
+        android:layout_toLeftOf="@+id/btnFechar" />
 
 </RelativeLayout>

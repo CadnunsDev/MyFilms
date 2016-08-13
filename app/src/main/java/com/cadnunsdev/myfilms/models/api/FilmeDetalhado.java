@@ -1,11 +1,15 @@
 package com.cadnunsdev.myfilms.models.api;
 
 import com.cadnunsdev.myfilms.models.FilmeProcurado;
+import com.orm.SugarRecord;
+import com.orm.dsl.Table;
 
 /**
  * Created by Tiago Silva on 12/08/2016.
  */
+@Table
 public class FilmeDetalhado extends FilmeProcurado{
+    private Long id;
     private String Rated    ;
     private String Released ;
     private String Runtime  ;
@@ -23,6 +27,10 @@ public class FilmeDetalhado extends FilmeProcurado{
     private String imdbVotes;
     private String Type     ;
     private boolean Response;
+
+    public FilmeDetalhado(){
+
+    }
     public String getRated() {
         return Rated;
     }
@@ -87,5 +95,7 @@ public class FilmeDetalhado extends FilmeProcurado{
         return Response;
     }
 
-
+    public long getId() {
+        return id;
+    }
 }

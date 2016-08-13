@@ -1,5 +1,6 @@
 package com.cadnunsdev.myfilms;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -25,11 +26,14 @@ import android.widget.TextView;
 
 import com.cadnunsdev.myfilms.infra.ui.UIUtils;
 import com.cadnunsdev.myfilms.models.FilmeProcurado;
+import com.cadnunsdev.myfilms.models.api.FilmeDetalhado;
 import com.cadnunsdev.myfilms.models.api.OmdbSearchResponse;
 import com.cadnunsdev.myfilms.services.api.OmdbService;
+import com.cadnunsdev.myfilms.services.db.OrmService;
 import com.cadnunsdev.myfilms.services.web.WebImageService;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,12 +54,17 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
+        final Activity ctx = this;
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+                List<FilmeDetalhado>  filmes = OrmService.listarSalvos();
+                FilmeSalvoDialog.create(ctx,filmes.get(0));
             }
         });
 
@@ -73,13 +82,8 @@ public class MainActivity extends AppCompatActivity
         _adapterLista = UIUtils.SimpleAdpater(this,_itensLista);
         _listaBuscas.setAdapter(_adapterLista);
         _edtBuscar = (EditText)findViewById(R.id.edtBuscar);
-        final Context ctx = this;
-        String img_url = "http://ia.media-imdb.com/images/M/MV5BMTQ1MjQwMTE5OF5BMl5BanBnXkFtZTgwNjk3MTcyMDE@._V1_SX300.jpg";
-
 
         SetViewDetalhes();
-
-
 
         _edtBuscar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
