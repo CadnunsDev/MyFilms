@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<FilmeProcurado> _itensLista;
     private ArrayAdapter<FilmeProcurado> _adapterLista;
     private LinearLayout _savedItensLayout;
+    private View _detalhesFilmeBusca;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity
         _listaBuscas.setAdapter(_adapterLista);
         _edtBuscar = (EditText)findViewById(R.id.edtBuscar);
         _savedItensLayout = (LinearLayout)findViewById(R.id.filmeSalvosListLayout);
+        _detalhesFilmeBusca = findViewById(R.id.detalhesFilmeBusca);
         SetViewDetalhes();
 
         _edtBuscar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -102,14 +104,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void SetViewDetalhes() {
-        final View detalhesFilmeBusca = findViewById(R.id.detalhesFilmeBusca);
-        detalhesFilmeBusca.setVisibility(View.GONE);
+
+        _detalhesFilmeBusca.setVisibility(View.GONE);
 
         _listaBuscas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 FilmeProcurado filme = _itensLista.get(i);
-                new DetalhesFilmesViewHelper(filme, detalhesFilmeBusca);
+                new DetalhesFilmesViewHelper(filme, _detalhesFilmeBusca);
             }
         });
     }
@@ -197,10 +199,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void ShowSavedItens() {
+        UIUtils.hideKeyBoard(this, _edtBuscar);
         _edtBuscar.setVisibility(View.GONE);
         _listaBuscas.setVisibility(View.GONE);
         _savedItensLayout.setVisibility(View.VISIBLE);
-
+        _detalhesFilmeBusca.setVisibility(View.GONE);
         ListView listaItensSalvos = (ListView)_savedItensLayout.findViewById(R.id.filmesSalvosListView);
         ListaFilmesSalvosViewHelper.configListView(this, listaItensSalvos);
     }
@@ -209,5 +212,9 @@ public class MainActivity extends AppCompatActivity
         _edtBuscar.setVisibility(View.VISIBLE);
         _listaBuscas.setVisibility(View.VISIBLE);
         _savedItensLayout.setVisibility(View.GONE);
+        _detalhesFilmeBusca.setVisibility(View.GONE);
+        _edtBuscar.setText(null);
+        _itensLista.clear();
+        _adapterLista.notifyDataSetChanged();
     }
 }
