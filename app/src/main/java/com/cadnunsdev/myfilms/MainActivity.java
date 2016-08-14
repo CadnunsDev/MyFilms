@@ -21,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private EditText _edtBuscar;
     private ArrayList<FilmeProcurado> _itensLista;
     private ArrayAdapter<FilmeProcurado> _adapterLista;
+    private LinearLayout _savedItensLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +63,11 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-                List<FilmeDetalhado>  filmes = OrmService.listarSalvos();
-                FilmeSalvoDialog.create(ctx,filmes.get(0));
+                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
+        fab.setVisibility(View.GONE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         _adapterLista = UIUtils.SimpleAdpater(this,_itensLista);
         _listaBuscas.setAdapter(_adapterLista);
         _edtBuscar = (EditText)findViewById(R.id.edtBuscar);
-
+        _savedItensLayout = (LinearLayout)findViewById(R.id.filmeSalvosListLayout);
         SetViewDetalhes();
 
         _edtBuscar.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -175,22 +176,38 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_search_web) {
+            ShowSearchElements();
+        } else if (id == R.id.nav_search_saved) {
+            ShowSavedItens();
         }
+//         else if (id == R.id.nav_slideshow) {
+//
+//        } else if (id == R.id.nav_manage) {
+//
+//        } else if (id == R.id.nav_share) {
+//
+//        } else if (id == R.id.nav_send) {
+//
+//        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void ShowSavedItens() {
+        _edtBuscar.setVisibility(View.GONE);
+        _listaBuscas.setVisibility(View.GONE);
+        _savedItensLayout.setVisibility(View.VISIBLE);
+
+        ListView listaItensSalvos = (ListView)_savedItensLayout.findViewById(R.id.filmesSalvosListView);
+        ListaFilmesSalvosViewHelper.configListView(this, listaItensSalvos);
+    }
+
+    private void ShowSearchElements() {
+        _edtBuscar.setVisibility(View.VISIBLE);
+        _listaBuscas.setVisibility(View.VISIBLE);
+        _savedItensLayout.setVisibility(View.GONE);
     }
 }

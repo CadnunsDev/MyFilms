@@ -23,18 +23,11 @@ public class FilmeSalvoDialog {
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setTitle("detalhes do Filme:");
         LayoutInflater inflater = activity.getLayoutInflater();
-        View dialoglayout = inflater.inflate(R.layout.partial_filme_detalhes,null);
-        dialoglayout.setLayoutParams(new FrameLayout.LayoutParams(200,200));
+        View dialoglayout = inflater.inflate(R.layout.partial_modal_filme_salvo,null);
+        new DetalhesFilmesViewHelper(filmeDetalhado, dialoglayout,true, true);
         builder.setView(dialoglayout);
         Dialog modal = builder.create();
-
-        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
-        lp.copyFrom(modal.getWindow().getAttributes());
-        lp.width = 500; //WindowManager.LayoutParams.MATCH_PARENT;
-        lp.height = 500;//WindowManager.LayoutParams.MATCH_PARENT;
         modal.show();
-        modal.getWindow().setAttributes(lp);
-
         return  modal;
         }
     }

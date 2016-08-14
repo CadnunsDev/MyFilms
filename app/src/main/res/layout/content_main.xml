@@ -37,4 +37,9 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/edtBuscar" />
+
+    <include layout="@layout/partial_lista_filmes_salvos"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        />
 </LinearLayout>

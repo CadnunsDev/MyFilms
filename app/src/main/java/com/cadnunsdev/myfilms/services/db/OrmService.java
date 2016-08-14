@@ -23,4 +23,8 @@ public class OrmService {
     public static List<FilmeDetalhado> listarSalvos() {
         return SugarRecord.listAll(FilmeDetalhado.class);
     }
+
+    public static void delete(FilmeDetalhado filme) {
+        SugarRecord.delete(filme);
+    }
 }

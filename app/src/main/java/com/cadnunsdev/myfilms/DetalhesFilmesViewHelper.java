@@ -56,6 +56,13 @@ public class DetalhesFilmesViewHelper {
             }
         });
     }
+
+    public DetalhesFilmesViewHelper(FilmeDetalhado filme, View viewToBind,boolean hideSaveButton, boolean hideFecharButton){
+        this(viewToBind);
+        BindData(filme);
+        _btnSalvar.setVisibility(hideSaveButton? View.GONE: View.VISIBLE);
+        _btnFecharDetalhes.setVisibility(hideFecharButton? View.GONE: View.VISIBLE);
+    }
     public DetalhesFilmesViewHelper(FilmeProcurado filmeProcurado, View detalhesFilmeBusca){
         this(detalhesFilmeBusca);
         _btnFecharDetalhes.setOnClickListener(new View.OnClickListener() {
