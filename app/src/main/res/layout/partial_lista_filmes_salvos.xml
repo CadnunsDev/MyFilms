@@ -10,11 +10,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Filmes Favoritos Salvos"
+        android:text="@string/filmes_favoritos_salvos"
         android:id="@+id/textView4"
-        android:capitalize="words"
         android:textAlignment="center"
-        android:background="#85b9f7"
         android:layout_margin="10dp"
         android:padding="10dp" />
 

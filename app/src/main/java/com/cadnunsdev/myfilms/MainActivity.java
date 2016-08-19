@@ -124,13 +124,13 @@ public class MainActivity extends AppCompatActivity
             public void onResponse(Call<OmdbSearchResponse> call, Response<OmdbSearchResponse> response) {
                 OmdbSearchResponse data = response.body();
                 _itensLista.clear();
-                if (data.totalResults == 0)
+                if (data.totalResults == 0){
                     UIUtils.notificar(_listaBuscas,"Nada foi encontrado");
+                }
                 else {
                     _itensLista.addAll(data.Search);
                     _adapterLista.notifyDataSetChanged();
                 }
-
             }
 
             @Override
